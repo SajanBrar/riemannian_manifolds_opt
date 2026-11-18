@@ -15,7 +15,7 @@ $$
 For fully observed data, the optimization problem is
 
 $$
-\boxed{\min_{U\in\mathbb{R}^{m\times r},\,V\in\mathbb{R}^{n\times r}}
+\boxed{\min_{U\in\mathbb{R}^{m\times r}, \ V\in\mathbb{R}^{n\times r}}
  f(U,V)=\frac{1}{2}\lVert UV^\top-Y\rVert_F^2.}
 $$
 
