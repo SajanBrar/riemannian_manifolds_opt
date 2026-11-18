@@ -109,7 +109,7 @@ Unlike the preconditioned metric, this metric is motivated by the geometry of th
 
 | Metric | Inner-product weighting | Riemannian gradient |
 |---|---|---|
-| Canonical | Identity weighting for both factors | \((EV,\ E^\top U)\) |
+| Canonical | Identity weighting for both factors | $(EV,\ E^\top U)$ |
 | Preconditioned | $V^\top V$ for $U$; $U^\top U$ for $V$ | $(EV(V^\top V)^{-1},\ E^\top U(U^\top U)^{-1})$ |
 | Right-invariant | $(U^\top U)^{-1}$ for $U$; $(V^\top V)^{-1}$ for $V$ | $(EV(U^\top U),\ E^\top U(V^\top V))$ |
 
@@ -159,19 +159,19 @@ The check must be interpreted separately for each metric because both the inner 
 
 ### 3.3 Equivalent factor rescaling
 
-Because the product \(UV^\top\) is unchanged by
+Because the product $UV^\top$ is unchanged by
 
-\[
+$$
 (U,V)\longmapsto(UM^{-1},VM^\top),
-\]
+$$
 
 the two factor pairs represent the same matrix. A scalar instance is
 
-\[
+$$
 (U,V)\longmapsto(cU,V/c).
-\]
+$$
 
-The report tests \(c\in\{0.01,1,100\}\) and compares the objective trajectories from these equivalent initial representations.
+The report tests $c\in\{0.01,1,100\}$ and compares the objective trajectories from these equivalent initial representations.
 
 - **Canonical metric:** it is not invariant under this reparameterization. 
 - **Preconditioned metric:** it is invariant under the coupled transformation above. 
@@ -179,7 +179,7 @@ The report tests \(c\in\{0.01,1,100\}\) and compares the objective trajectories 
 
 ### 3.4 Varying the reconstruction rank
 
-The rank experiment fixes the generative rank at \(p=10\) and tests reconstruction ranks
+The rank experiment fixes the generative rank at $p=10$ and tests reconstruction ranks
 
 $$
 r\in\{2,5,10,20,50\}.
