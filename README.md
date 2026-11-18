@@ -34,6 +34,7 @@ $$
 Thus, different pairs of factors can represent exactly the same matrix. The experiments investigate how different geometries handle this freedom and how their optimization trajectories compare.
 
 Define the residual $E=UV^\top-Y$. The Euclidean gradients, common to all three methods, are
+
 $$
 \nabla_U f=EV,\qquad \nabla_V f=E^\top U.
 $$
