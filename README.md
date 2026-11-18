@@ -69,11 +69,13 @@ This gives the baseline geometry. It is simple, but it does not account for the 
 
 The preconditioned metric weights each factor's tangent directions using the Gram matrix of the other factor:
 
+$$
 \begin{align*}
 \langle\xi,\eta\rangle_{\mathrm{pre}}
 ={}&{tr}\!\left((V^\top V)\xi_U^\top\eta_U\right)\\
 &+{tr}\!\left((U^\top U)\xi_V^\top\eta_V\right).
 \end{align*}
+$$
 
 The corresponding Riemannian gradient is
 
