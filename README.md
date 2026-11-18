@@ -70,11 +70,9 @@ This gives the baseline geometry. It is simple, but it does not account for the 
 The preconditioned metric weights each factor's tangent directions using the Gram matrix of the other factor:
 
 $$
-\begin{align*}
 \langle\xi,\eta\rangle_{\mathrm{pre}}
-={}&{tr}\!\left((V^\top V)\xi_U^\top\eta_U\right)\\
-&+{tr}\!\left((U^\top U)\xi_V^\top\eta_V\right).
-\end{align*}
+={tr}\left((V^\top V)\xi_U^\top\eta_U\right)\\
++{tr}\left((U^\top U)\xi_V^\top\eta_V\right).
 $$
 
 The corresponding Riemannian gradient is
@@ -91,11 +89,11 @@ This geometry is related to preconditioning and to the geometry proposed by Mish
 
 The right-invariant metric is
 
-\begin{align*}
+$$
 \langle\xi,\eta\rangle_{\mathrm{ri}}
-={}&{tr}\!\left((U^\top U)^{-1}\xi_U^\top\eta_U\right)\\
-&+{tr}\!\left((V^\top V)^{-1}\xi_V^\top\eta_V\right).
-\end{align*}
+={tr}\left((U^\top U)^{-1}\xi_U^\top\eta_U\right)\\
+&+{tr}\left((V^\top V)^{-1}\xi_V^\top\eta_V\right).
+$$
 
 Its Riemannian gradient is
 
@@ -175,11 +173,9 @@ the two factor pairs represent the same matrix. A scalar instance is
 
 The report tests \(c\in\{0.01,1,100\}\) and compares the objective trajectories from these equivalent initial representations.
 
-- **Canonical metric:** it is not invariant under this reparameterization. Consequently, equivalent initial factorizations can produce different optimization trajectories and convergence behavior.
-- **Preconditioned metric:** it is invariant under the coupled transformation above. Its trajectories are therefore expected to be unchanged in exact arithmetic when the starting factors are transformed together.
-- **Right-invariant metric:** it is also invariant under the coupled transformation. The report additionally establishes invariance under independent invertible changes of basis in the two factors, a broader invariance of the metric itself.
-
-In the reported rescaling experiment, the canonical curves separate, while the preconditioned and right-invariant curves are approximately invariant. A small deviation between right-invariant curves is visible around iteration 60; the report notes that this may be due to numerical effects.
+- **Canonical metric:** it is not invariant under this reparameterization. 
+- **Preconditioned metric:** it is invariant under the coupled transformation above. 
+- **Right-invariant metric:** it is also invariant under the coupled transformation. 
 
 ### 3.4 Varying the reconstruction rank
 
@@ -189,7 +185,7 @@ $$
 r\in\{2,5,10,20,50\}.
 $$
 
-For each rank, the code performs five independent runs and plots the mean final objective with standard-deviation error bars for each metric. The reported curves decrease as the fitted rank grows. They are similar through the correctly specified rank $r=p=10$, then diverge for larger ranks. Beyond the signal rank, additional factor dimensions can fit components of the noise, and the three geometries can behave differently during optimization.
+For each rank, the code performs five independent runs and plots the mean final objective with standard-deviation error bars for each metric. The reported curves decrease as the fitted rank grows. They are similar through the correctly specified rank $r=p=10$, then diverge for larger ranks. 
 
 ### 3.5 Partially observed matrices (matrix completion)
 
@@ -220,13 +216,12 @@ $$
 k= s(m+n-r)r
 $$
 
-observed entries, where \(s\) is an oversampling parameter. The generator rejects masks that leave any row or column entirely unobserved. The uploaded `main_bonus.py` uses \(s=6\) and generates a noise-free synthetic target. It plots both (i) the objective on observed entries and (ii) the relative reconstruction error against the complete synthetic ground-truth matrix:
+observed entries, where \(s\) is an oversampling parameter. The generator rejects masks that leave any row or column entirely unobserved. The uploaded `main_bonus.py` uses \(s=6\) and generates a noise-free synthetic target. 
 
 $$
 \frac{\lVert UV^\top-Y_{\mathrm{true}}\rVert_F}
-{\lVert Y_{\mathrm{true}}\rVert_F}.$$
-
-The second quantity is available here because the experiment generated the complete ground-truth matrix. In a real matrix-completion application, unobserved ground-truth entries are not available, so this full-matrix error cannot normally be computed directly.
+{\lVert Y_{\mathrm{true}}\rVert_F}.
+$$
 
 
 ### Script descriptions
