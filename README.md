@@ -150,7 +150,7 @@ $$
 For each metric, the implementation checks the first-order approximation
 
 $$
-f(R_x(h\eta))\approx f(x)+h\langle\operatorname{grad}f(x),\eta\rangle_x,
+f(R_x(h\eta))\approx f(x)+h\langle{grad}f(x),\eta\rangle_x,
 $$
 
 where $R_x$ is the retraction and $h$ is a small step. For a correct Riemannian gradient, the model error should scale quadratically with the step size, producing a slope close to 2 in a log-log plot over the range where truncation error dominates floating-point round-off. The report includes this check for all three metrics.
