@@ -1,8 +1,8 @@
 # Riemannian Optimization for Low-Rank Matrix Factorization
 
-This project studies how the choice of Riemannian geometry affects the numerical optimization of low-rank matrix factorization. It implements three Riemannian metrics on the same product space and compares the resulting steepest-descent methods across exact recovery, noisy observations, factor rescaling, rank variation, and partially observed data.
+This project studies how the choice of Riemannian geometry affects the numerical optimization of low-rank matrix factorization. It implements three Riemannian metrics on the same product space and compares the resulting steepest-descent methods.
 
-The implementation uses **Python, NumPy, Matplotlib, and Pymanopt**. A synthetic data generator makes the experiments reproducible without requiring an external dataset.
+The implementation uses **Python, NumPy, Matplotlib, and Pymanopt**.
 
 ## 1. Problem formulation
 
@@ -52,14 +52,14 @@ The canonical metric is the ordinary Euclidean inner product on the product spac
 
 $$
 \langle\xi,\eta\rangle_{\mathrm{can}}
-=\operatorname{tr}(\xi_U^\top\eta_U)
-+\operatorname{tr}(\xi_V^\top\eta_V).
+={tr}(\xi_U^\top\eta_U)
++{tr}(\xi_V^\top\eta_V).
 $$
 
 Its Riemannian gradient is therefore the Euclidean gradient:
 
 $$
-\operatorname{grad}_{\mathrm{can}} f
+{grad}_{\mathrm{can}} f
 =(EV, E^\top U).
 $$
 
@@ -69,18 +69,16 @@ This gives the baseline geometry. It is simple, but it does not account for the 
 
 The preconditioned metric weights each factor's tangent directions using the Gram matrix of the other factor:
 
-\[
-\begin{aligned}
+\begin{align*}
 \langle\xi,\eta\rangle_{\mathrm{pre}}
-={}&\operatorname{tr}\!\left((V^\top V)\xi_U^\top\eta_U\right)\\
-&+\operatorname{tr}\!\left((U^\top U)\xi_V^\top\eta_V\right).
-\end{aligned}
-\]
+={}&{tr}\!\left((V^\top V)\xi_U^\top\eta_U\right)\\
+&+{tr}\!\left((U^\top U)\xi_V^\top\eta_V\right).
+\end{align*}
 
 The corresponding Riemannian gradient is
 
 $$
-\operatorname{grad}_{\mathrm{pre}} f
+{grad}_{\mathrm{pre}} f
 =\left(EV(V^\top V)^{-1},\;
 E^\top U(U^\top U)^{-1}\right).
 $$
@@ -91,21 +89,19 @@ This geometry is related to preconditioning and to the geometry proposed by Mish
 
 The right-invariant metric is
 
-\[
-\begin{aligned}
+\begin{align*}
 \langle\xi,\eta\rangle_{\mathrm{ri}}
-={}&\operatorname{tr}\!\left((U^\top U)^{-1}\xi_U^\top\eta_U\right)\\
-&+\operatorname{tr}\!\left((V^\top V)^{-1}\xi_V^\top\eta_V\right).
-\end{aligned}
-\]
+={}&{tr}\!\left((U^\top U)^{-1}\xi_U^\top\eta_U\right)\\
+&+{tr}\!\left((V^\top V)^{-1}\xi_V^\top\eta_V\right).
+\end{align*}
 
 Its Riemannian gradient is
 
-\[
-\operatorname{grad}_{\mathrm{ri}} f
+$$
+{grad}_{\mathrm{ri}} f
 =\left(EV(U^\top U),\;
 E^\top U(V^\top V)\right).
-\]
+$$
 
 Unlike the preconditioned metric, this metric is motivated by the geometry of the factor space rather than by the objective's cross-factor structure.
 
@@ -114,12 +110,9 @@ Unlike the preconditioned metric, this metric is motivated by the geometry of th
 | Metric | Inner-product weighting | Riemannian gradient |
 |---|---|---|
 | Canonical | Identity weighting for both factors | \((EV,\ E^\top U)\) |
-| Preconditioned | \(V^\top V\) for \(U\); \(U^\top U\) for \(V\) | \((EV(V^\top V)^{-1},\ E^\top U(U^\top U)^{-1})\) |
-| Right-invariant | \((U^\top U)^{-1}\) for \(U\); \((V^\top V)^{-1}\) for \(V\) | \((EV(U^\top U),\ E^\top U(V^\top V))\) |
+| Preconditioned | $V^\top V$ for $U$; $U^\top U$ for $V$ | $(EV(V^\top V)^{-1},\ E^\top U(U^\top U)^{-1})$ |
+| Right-invariant | $(U^\top U)^{-1}$ for $U$; $(V^\top V)^{-1}$ for $V$ | $(EV(U^\top U),\ E^\top U(V^\top V))$ |
 
-The factor spaces are unconstrained, so the Euclidean projection and retraction inherited from Pymanopt's Euclidean product manifold are used for all three metrics. The geometry enters through the inner product and the Euclidean-to-Riemannian gradient map.
-
-**Numerical consideration:** the preconditioned and right-invariant formulas use factor Gram matrices and require them to be nonsingular for the metric to be positive definite. The implementation uses linear solves where an inverse is needed in the gradient conversion rather than explicitly forming matrix inverses.
 
 ## 3. Experimental cases
 
@@ -151,14 +144,6 @@ $$
 Y=Y_{\mathrm{true}}+\varepsilon,
 \qquad \varepsilon_{ij}\sim\mathcal N(0,\sigma^2).
 $$
-
-These two settings illustrate different recovery limits:
-
-- **Noise-free, correctly specified rank:** when the fitted rank \(r\) matches the generative rank \(p\), the target has an exact rank-\(r\) representation. The objective can approach machine precision, subject to numerical optimization and stopping tolerances.
-- **Noisy observations:** the target includes a full-rank noise component in general. A rank-limited factorization cannot remove all of this component, so the residual does not generally converge to zero. The final objective reflects both the approximation rank and the noise.
-- **Rank mismatch:** when \(r<p\), the model has insufficient rank to represent the low-rank signal exactly. When \(r>p\), it has additional degrees of freedom that can also fit noise. The rank experiment examines how the final objective and differences between metrics change across these regimes.
-
-The report compares a noise-free run with \(m=100\), \(n=500\), and \(r=p=10\), and a noisy run with \(m=100\), \(n=500\), and \(r=p=5\). The reconstruction-error plots use a logarithmic vertical axis to show convergence over several orders of magnitude.
 
 ### 3.2 Gradient validation
 
@@ -204,7 +189,7 @@ $$
 
 For each rank, the code performs five independent runs and plots the mean final objective with standard-deviation error bars for each metric. The reported curves decrease as the fitted rank grows. They are similar through the correctly specified rank $r=p=10$, then diverge for larger ranks. Beyond the signal rank, additional factor dimensions can fit components of the noise, and the three geometries can behave differently during optimization.
 
-### 3.6 Partially observed matrices (matrix completion)
+### 3.5 Partially observed matrices (matrix completion)
 
 The matrix-completion experiment assumes that only entries indexed by an observation set \(\Omega\) are available. A binary mask is defined by
 
