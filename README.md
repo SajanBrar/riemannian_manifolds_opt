@@ -6,38 +6,37 @@ The implementation uses **Python, NumPy, Matplotlib, and Pymanopt**. A synthetic
 
 ## 1. Problem formulation
 
-Let \(Y\in\mathbb{R}^{m\times n}\) be a matrix to be approximated by a rank-\(r\) factorization. We represent the approximation as
+Let $Y\in\mathbb{R}^{m\times n}$ be a matrix to be approximated by a rank-$r$ factorization. We represent the approximation as
 
-\[
+$$
 X=UV^\top,\qquad U\in\mathbb{R}^{m\times r},\quad V\in\mathbb{R}^{n\times r}.
-\]
+$$
 
 For fully observed data, the optimization problem is
 
-\[
+$$
 \boxed{\min_{U\in\mathbb{R}^{m\times r},\,V\in\mathbb{R}^{n\times r}}
  f(U,V)=\frac{1}{2}\lVert UV^\top-Y\rVert_F^2.}
-\]
+$$
 
 The variables lie on the product space
 
-\[
+$$
 \mathcal M=\mathbb{R}^{m\times r}\times\mathbb{R}^{n\times r}.
-\]
+$$
 
-A point on this space is a pair \((U,V)\), and a tangent vector is a pair \((\xi_U,\xi_V)\) of matrices with the same respective dimensions. Since the factors are unconstrained Euclidean matrices, the tangent space at every point is the full product space. The factorization is non-unique: for any invertible \(M\in\mathbb{R}^{r\times r}\),
+A point on this space is a pair $(U,V)$, and a tangent vector is a pair $(\xi_U,\xi_V)$ of matrices with the same respective dimensions. Since the factors are unconstrained Euclidean matrices, the tangent space at every point is the full product space. The factorization is non-unique: for any invertible $M\in\mathbb{R}^{r\times r}$,
 
-\[
+$$
 UV^\top=(UM^{-1})(VM^\top)^\top.
-\]
+$$
 
 Thus, different pairs of factors can represent exactly the same matrix. The experiments investigate how different geometries handle this freedom and how their optimization trajectories compare.
 
-Define the residual \(E=UV^\top-Y\). The Euclidean gradients, common to all three methods, are
-
-\[
+Define the residual $E=UV^\top-Y$. The Euclidean gradients, common to all three methods, are
+$$
 \nabla_U f=EV,\qquad \nabla_V f=E^\top U.
-\]
+$$
 
 The Riemannian gradient depends on the metric used to define the inner product on each tangent space.
 
@@ -45,24 +44,24 @@ The Riemannian gradient depends on the metric used to define the inner product o
 
 All three methods optimize the same objective, use the same initial factors for a given comparison, and use Pymanopt's Riemannian steepest-descent optimizer with backtracking line search. They differ in the inner product and in the conversion from the Euclidean gradient to the Riemannian gradient.
 
-Let \(\xi=(\xi_U,\xi_V)\) and \(\eta=(\eta_U,\eta_V)\) be tangent vectors at \((U,V)\).
+Let $\xi=(\xi_U,\xi_V)$ and $\eta=(\eta_U,\eta_V)$ be tangent vectors at $(U,V)$.
 
 ### 2.1 Canonical metric
 
 The canonical metric is the ordinary Euclidean inner product on the product space:
 
-\[
+$$
 \langle\xi,\eta\rangle_{\mathrm{can}}
 =\operatorname{tr}(\xi_U^\top\eta_U)
 +\operatorname{tr}(\xi_V^\top\eta_V).
-\]
+$$
 
 Its Riemannian gradient is therefore the Euclidean gradient:
 
-\[
+$$
 \operatorname{grad}_{\mathrm{can}} f
 =(EV, E^\top U).
-\]
+$$
 
 This gives the baseline geometry. It is simple, but it does not account for the non-uniqueness and rescaling freedom of the factors.
 
@@ -80,11 +79,11 @@ The preconditioned metric weights each factor's tangent directions using the Gra
 
 The corresponding Riemannian gradient is
 
-\[
+$$
 \operatorname{grad}_{\mathrm{pre}} f
 =\left(EV(V^\top V)^{-1},\;
 E^\top U(U^\top U)^{-1}\right).
-\]
+$$
 
 This geometry is related to preconditioning and to the geometry proposed by Mishra, Apuroop, and Sepulchre. It compensates for the scale and conditioning of the two factors through their Gram matrices.
 
@@ -128,30 +127,30 @@ The factor spaces are unconstrained, so the Euclidean projection and retraction 
 
 The synthetic ground-truth matrix is generated from independent standard Gaussian factors:
 
-\[
+$$
 A\in\mathbb{R}^{m\times p},\qquad
 B\in\mathbb{R}^{n\times p},\qquad
 A_{ij},B_{ij}\sim\mathcal N(0,1),
-\]
+$$
 
 with
 
-\[
+$$
 Y_{\mathrm{true}}=AB^\top.
-\]
+$$
 
 The observed matrix can be either noise-free,
 
-\[
+$$
 Y=Y_{\mathrm{true}},
-\]
+$$
 
 or noisy,
 
-\[
+$$
 Y=Y_{\mathrm{true}}+\varepsilon,
 \qquad \varepsilon_{ij}\sim\mathcal N(0,\sigma^2).
-\]
+$$
 
 These two settings illustrate different recovery limits:
 
@@ -165,11 +164,11 @@ The report compares a noise-free run with \(m=100\), \(n=500\), and \(r=p=10\), 
 
 For each metric, the implementation checks the first-order approximation
 
-\[
+$$
 f(R_x(h\eta))\approx f(x)+h\langle\operatorname{grad}f(x),\eta\rangle_x,
-\]
+$$
 
-where \(R_x\) is the retraction and \(h\) is a small step. For a correct Riemannian gradient, the model error should scale quadratically with the step size, producing a slope close to 2 in a log-log plot over the range where truncation error dominates floating-point round-off. The report includes this check for all three metrics.
+where $R_x$ is the retraction and $h$ is a small step. For a correct Riemannian gradient, the model error should scale quadratically with the step size, producing a slope close to 2 in a log-log plot over the range where truncation error dominates floating-point round-off. The report includes this check for all three metrics.
 
 The check must be interpreted separately for each metric because both the inner product and the Riemannian gradient conversion change with the metric. Very small step sizes can be dominated by floating-point round-off.
 
@@ -195,90 +194,53 @@ The report tests \(c\in\{0.01,1,100\}\) and compares the objective trajectories 
 
 In the reported rescaling experiment, the canonical curves separate, while the preconditioned and right-invariant curves are approximately invariant. A small deviation between right-invariant curves is visible around iteration 60; the report notes that this may be due to numerical effects.
 
-### 3.4 Scaling both factors
-
-A different experiment applies
-
-\[
-(U,V)\longmapsto(cU,cV).
-\]
-
-This is **not** a symmetry of the factorization, because the represented matrix changes to \(c^2UV^\top\). It therefore changes the starting point's reconstruction and objective value, rather than merely changing the representation of the same matrix. The report plots the resulting trajectories for all three metrics and for \(c\in\{0.01,1,100\}\). This case should not be confused with the equivalent rescaling \((cU,V/c)\).
-
-### 3.5 Varying the reconstruction rank
+### 3.4 Varying the reconstruction rank
 
 The rank experiment fixes the generative rank at \(p=10\) and tests reconstruction ranks
 
-\[
+$$
 r\in\{2,5,10,20,50\}.
-\]
+$$
 
-For each rank, the code performs five independent runs and plots the mean final objective with standard-deviation error bars for each metric. The reported curves decrease as the fitted rank grows. They are similar through the correctly specified rank \(r=p=10\), then diverge for larger ranks. Beyond the signal rank, additional factor dimensions can fit components of the noise, and the three geometries can behave differently during optimization.
+For each rank, the code performs five independent runs and plots the mean final objective with standard-deviation error bars for each metric. The reported curves decrease as the fitted rank grows. They are similar through the correctly specified rank $r=p=10$, then diverge for larger ranks. Beyond the signal rank, additional factor dimensions can fit components of the noise, and the three geometries can behave differently during optimization.
 
 ### 3.6 Partially observed matrices (matrix completion)
 
 The matrix-completion experiment assumes that only entries indexed by an observation set \(\Omega\) are available. A binary mask is defined by
 
-\[
+$$
 \Omega_{ij}=\begin{cases}
 1,&\text{if entry }(i,j)\text{ is observed},\\
 0,&\text{otherwise}.
 \end{cases}
-\]
+$$
 
 The objective becomes
 
-\[
+$$
 \boxed{
 \min_{U,V}\frac12\left\lVert
 \Omega\odot(UV^\top-Y)
 \right\rVert_F^2,
 }
-\]
+$$
 
-where \(\odot\) denotes elementwise multiplication. Only observed entries contribute to the optimization objective. The three Riemannian metrics and their gradient mappings are otherwise unchanged; the residual used by the objective and Euclidean gradient is masked before the gradient is formed.
+where $\odot$ denotes elementwise multiplication. Only observed entries contribute to the optimization objective. The three Riemannian metrics and their gradient mappings are otherwise unchanged; the residual used by the objective and Euclidean gradient is masked before the gradient is formed.
 
 The synthetic mask contains
 
-\[
+$$
 k= s(m+n-r)r
-\]
+$$
 
 observed entries, where \(s\) is an oversampling parameter. The generator rejects masks that leave any row or column entirely unobserved. The uploaded `main_bonus.py` uses \(s=6\) and generates a noise-free synthetic target. It plots both (i) the objective on observed entries and (ii) the relative reconstruction error against the complete synthetic ground-truth matrix:
 
-\[
+$$
 \frac{\lVert UV^\top-Y_{\mathrm{true}}\rVert_F}
-{\lVert Y_{\mathrm{true}}\rVert_F}.
-\]
+{\lVert Y_{\mathrm{true}}\rVert_F}.$$
 
 The second quantity is available here because the experiment generated the complete ground-truth matrix. In a real matrix-completion application, unobserved ground-truth entries are not available, so this full-matrix error cannot normally be computed directly.
 
-## 4. Main observations
-
-The experiments support the following conclusions for the tested synthetic settings:
-
-1. **The metric changes optimization dynamics.** The objective and Euclidean gradient are shared, but the Riemannian gradient is scaled differently by each geometry. The reconstruction-error curves show that these choices can substantially change the rate and path of convergence.
-2. **The preconditioned metric converges quickly in the displayed comparisons.** In the reported runs it achieves a rapid decrease in reconstruction error. This is an empirical result for the tested data and initialization, not a guarantee that it is always the fastest method.
-3. **The canonical metric is sensitive to equivalent factor rescaling.** It does not respect the factorization's coupled change of coordinates, whereas the preconditioned and right-invariant metrics do.
-4. **The right-invariant metric has a broader basis-change invariance.** Its inner product is invariant under independent invertible changes of basis in the two factors. Such independent changes do not, in general, preserve the product \(UV^\top\), so this is a geometric invariance rather than a factorization symmetry.
-5. **The fitted rank matters.** Ranks below the generative rank under-represent the signal. Increasing rank toward the signal rank improves the fit; ranks above it add flexibility to fit noise and can expose differences between the metrics.
-6. **Matrix completion separates observed fit from full-matrix recovery.** A low observed-entry objective does not by itself guarantee a low error on every unobserved entry. The synthetic experiment reports both quantities to make that distinction visible.
-
-These are observations from finite synthetic experiments. They should not be interpreted as universal convergence-rate guarantees for all matrices, ranks, noise levels, or initializations.
-
-## 5. Repository structure
-
-Keep the following files in the repository root. The names shown below are the names expected by the imports in the uploaded scripts.
-
-```text
-.
-├── README.md
-├── assignment1_helper_forclass.py
-├── main.py
-├── main_bonus.py
-├── rank_exp.py
-└── requirements.txt
-```
 
 ### Script descriptions
 
@@ -289,64 +251,6 @@ Keep the following files in the repository root. The names shown below are the n
 | `rank_exp.py` | Repeats the noisy low-rank experiment for several fitted ranks and multiple random trials. | Mean final objective, standard deviations, and an error-bar plot. |
 | `main_bonus.py` | Generates a partially observed synthetic matrix and runs all three metrics with an observation mask. | Printed optimization diagnostics and plots of observed objective and full-matrix relative error. |
 | `requirements.txt` | Lists the Python package dependencies. | Used to install the environment. |
-
-## 6. Installation
-
-Python **3.11** is the target version. From the repository root, create and activate a virtual environment:
-
-```bash
-python3.11 -m venv .venv
-source .venv/bin/activate
-```
-
-Install the dependencies:
-
-```bash
-python -m pip install --upgrade pip
-pip install -r requirements.txt
-```
-
-The requirements file specifies:
-
-- `numpy >= 1.24`
-- `pymanopt >= 2.2`
-- `matplotlib >= 3.7`
-
-## 7. Running the experiments
-
-Run commands from the repository root so that the Python imports resolve correctly.
-
-### Compare the three metrics and factor rescalings
-
-```bash
-python main.py
-```
-
-The current script defaults to `seed=0`, `m=100`, `n=1000`, and `r=p=10`, with a maximum of 200 optimizer iterations. It runs the gradient check and displays the objective comparison and factor-rescaling plots. The current `generate_data` implementation adds Gaussian noise by default. To run the noise-free case, call it with `noise_std=0` in the main block.
-
-### Compare reconstruction ranks
-
-```bash
-python rank_exp.py
-```
-
-The current configuration uses `m=100`, `n=500`, `p=10`, ranks `[2, 5, 10, 20, 50]`, five trials, and a maximum of 200 iterations per optimization run. It reports the mean and standard deviation of the final objective for each metric and rank.
-
-### Run matrix completion
-
-```bash
-python main_bonus.py
-```
-
-The current configuration uses a synthetic matrix of size `100 × 500`, fitted rank `10`, and oversampling parameter `s=6`. The uploaded script constructs a noise-free target and generates a binary observation mask with at least one observed entry in every row and column.
-
-All figures are displayed interactively using Matplotlib. The scripts do not currently save figures to disk.
-
-## 8. Reproducibility and configuration
-
-The main scripts define a random seed near the top of the file (`SEED = 0`) and use NumPy's random number generator for synthetic data, initial factors, and observation masks. Change the seed to explore other realizations. The dimensions, generative rank, fitted rank, number of trials, noise level, oversampling factor, and maximum iteration count are also defined near the top of the relevant scripts.
-
-For comparisons between metrics, use the same data matrix and the same initial factors. This isolates the effect of the Riemannian metric from differences in data or initialization.
 
 ## 9. References
 
