@@ -80,7 +80,7 @@ The corresponding Riemannian gradient is
 
 $$
 {grad}_{\mathrm{pre}} f
-=\left(EV(V^\top V)^{-1},\;
+=\left(EV(V^\top V)^{-1},
 E^\top U(U^\top U)^{-1}\right).
 $$
 
@@ -99,7 +99,7 @@ Its Riemannian gradient is
 
 $$
 {grad}_{\mathrm{ri}} f
-=\left(EV(U^\top U),\;
+=\left(EV(U^\top U),
 E^\top U(V^\top V)\right).
 $$
 
