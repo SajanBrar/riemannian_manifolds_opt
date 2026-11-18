@@ -72,7 +72,7 @@ The preconditioned metric weights each factor's tangent directions using the Gra
 
 $$
 \langle\xi,\eta\rangle_{\mathrm{pre}}
-={tr}\left((V^\top V)\xi_U^\top\eta_U\right)\\
+={tr}\left((V^\top V)\xi_U^\top\eta_U\right)
 +{tr}\left((U^\top U)\xi_V^\top\eta_V\right).
 $$
 
@@ -92,8 +92,7 @@ The right-invariant metric is
 
 $$
 \langle\xi,\eta\rangle_{\mathrm{ri}}
-={tr}\left((U^\top U)^{-1}\xi_U^\top\eta_U\right)\\
-&+{tr}\left((V^\top V)^{-1}\xi_V^\top\eta_V\right).
+={tr}\left((U^\top U)^{-1}\xi_U^\top\eta_U\right)+{tr}\left((V^\top V)^{-1}\xi_V^\top\eta_V\right).
 $$
 
 Its Riemannian gradient is
